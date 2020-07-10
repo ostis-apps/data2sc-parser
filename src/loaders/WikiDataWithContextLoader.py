@@ -5,6 +5,9 @@ import wptools
 class WikiDataWithContextLoader(WikiDataLoader):
     def getEntity(self, entity, lang='en'):
         super().getEntity(entity, lang=lang)
+        self._page = wptools.page(wikibase=self._page.data['wikibase'], lang='en', skip=[
+                                  'labels', 'imageinfo'], silent=True)
+        self._page.get_wikidata()
         context = self._page.data['claims']
         for rlt, ents in context.items():
             rlt_page = wptools.page(

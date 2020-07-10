@@ -24,7 +24,7 @@ def parse(entities, save_dir='sc_out', lang='en', loader='wiki', with_context=Fa
                 pass
             os.chdir(save_dir)
             print('Saving intermediate JSON file...')
-            f = open("debug.json", "wt")
+            f = open("debug.json", "wt", encoding="utf-8")
             f.write(loader.getJson())
             f.close()
             print('Saved')

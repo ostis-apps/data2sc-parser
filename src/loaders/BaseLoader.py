@@ -18,4 +18,4 @@ class BaseLoader(ABC):
             self.getEntity(entity, lang=lang)
 
     def getJson(self):
-        return json.dumps(self._info)
+        return json.dumps(self._info, ensure_ascii=False)

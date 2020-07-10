@@ -28,7 +28,6 @@ def json_to_scs(raw_info, save_dir):
         except Exception:
             continue
 
-    f = open('triplets.scs', 'w')
     for triplet in info['triplets']:
         scs = open('triplets.scs', 'at', encoding='utf-8')
         scs.write('{} => {}: {};;\n'.format(
