@@ -66,9 +66,9 @@ You can see 3 sections:
 
 In `entities` section stores info about all entities which was loaded from external sources. Each entity include `identifier`, `label` and `description`. `label` and `description` include information in different languages. If loaded entity has image in `image_url` stores URL for loading this image.
 
-For `relations` section stores info about relations. All the same as in `entities` section but relations usually don't have images.
+In `relations` section stores info about relations. All the same as in `entities` section but relations usually don't have images.
 
-In `triplets` section stores relations between entities. It is represented in form of triplets, where the first element is the entity from which a relation goes to the second entity. Second element is the relation that two entities. Third element is second entity.
+In `triplets` section stores relations between entities. It is represented in form of triplets, where the first element is the entity from which a relation goes to the second entity. Second element is the relation that connect two entities. Third element is second entity.
 
 After loading data JSON file translating by JsonToScsTranslator and all info saves to SCs files.
 
