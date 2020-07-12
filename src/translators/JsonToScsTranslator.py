@@ -11,28 +11,41 @@ def json_to_scs(raw_info, save_dir):
     except FileExistsError:
         pass
     os.chdir(save_dir)
-    try:
-        os.mkdir('images')
-    except FileExistsError:
-        pass
 
     info = json.loads(raw_info)
     jinja_env = Environment(loader=FileSystemLoader(os.path.realpath(
         '{}/../templates'.format(os.path.dirname(os.path.realpath(__file__))))))
 
+    try:
+        os.mkdir('entities')
+    except FileExistsError:
+        pass
+    os.chdir('entities')
+    try:
+        os.mkdir('images')
+    except FileExistsError:
+        pass
     template = jinja_env.get_template('entity.scs')
     for ent in info['entities'].values():
         translate_entity(ent, template)
+    os.chdir('..')
 
+    try:
+        os.mkdir('relations')
+    except FileExistsError:
+        pass
+    os.chdir('relations')
     template = jinja_env.get_template('relation.scs')
     for rlt in info['relations'].values():
         translate_relation(rlt, template)
+    os.chdir('..')
 
     template = jinja_env.get_template('triplets.scs')
     if len(info['triplets']) != 0:
         scs = open('triplets.scs', 'at', encoding='utf-8')
         scs.write(template.render(triplets=info['triplets']))
         scs.close()
+    os.chdir('..')
 
 
 def translate_entity(entity, template):

@@ -34,12 +34,12 @@ Example
 * Then type language of title with `--lang` attribute (by default its 'en')
 * Don't forget to choose directory for saving scs files and images. Make it with `--dir` attribute (by default its 'sc_out')
 * Select external source with attribute `--source` from 'wiki' and 'google' (by default its 'wiki')
-* If you want to get information about entity with context (relations with other entities and etc.) use `--context=yes` (by default its 'no')
-* To get an intermediate JSON file use `--debug=yes` (by default its 'no')
+* If you want to get information about entity with context (relations with other entities and etc.) use `--context` (by default its 'False')
+* To get an intermediate JSON file use `--debug` (by default its 'False')
 
 Example with attributes
 
-    python3 parse.py Минск --lang=ru --dir=output_dir --debug=yes
+    python3 parse.py Минск --lang=ru --dir=output_dir --debug
 
 For help enter
 
