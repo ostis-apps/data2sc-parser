@@ -1,5 +1,6 @@
 from .BaseLoader import BaseLoader
 import wptools
+import re
 
 
 class WikiDataLoader(BaseLoader):
@@ -17,30 +18,42 @@ class WikiDataLoader(BaseLoader):
                 0]['url']
 
     def getEntity(self, entity, lang='en'):
-        if len(entity.split()) == 1:
-            entity = entity.capitalize()
-        else:
-            temp = entity.split()
-            temp[0] = temp[0].capitalize()
-            entity = ' '.join(temp)
-        ent_type = 'entities'
-        if entity.startswith('Q'):
+        if entity.startswith('Q') and entity[1:].isnumeric():
             self._page = wptools.page(wikibase=entity, lang=lang,
                                       skip=['labels'], silent=True)
-        elif entity.startswith('P'):
+            ent_type = 'entities'
+            self._page.get_wikidata()
+        elif entity.startswith('P') and entity[1:].isnumeric():
             self._page = wptools.page(wikibase=entity, lang=lang, skip=[
                 'labels', 'imageinfo'], silent=True)
             ent_type = 'relations'
+            self._page.get_wikidata()
         else:
             self._page = wptools.page(
                 entity, skip=['labels'], lang=lang, silent=True)
-        self._page.get_wikidata()
+            try:
+                self._page.get_wikidata()
+            except LookupError:
+                self._page = wptools.page(entity.capitalize(), skip=[
+                                          'labels'], lang=lang, silent=True)
+                try:
+                    self._page.get_wikidata()
+                except LookupError:
+                    words = entity.split()
+                    for index, word in enumerate(words):
+                        words[index] = word.capitalize()
+                    self._page = wptools.page(' '.join(words), skip=[
+                        'labels'], lang=lang, silent=True)
+                    self._page.get_wikidata()
+            ent_type = 'entities' if self._page.data['wikibase'].startswith(
+                'Q') else 'relations'
 
         if lang != 'en':
             en_page = wptools.page(wikibase=self._page.data['wikibase'], lang='en', skip=[
                                    'labels', 'imageinfo'], silent=True)
             en_page.get_wikidata()
-            title = en_page.data['title']
+            title = re.sub(r"\+|-|–|\/|:|\s", '_',
+                           re.sub(r"'s?|\(|\)|,", '', en_page.data['title']))
             self._info[ent_type][title] = {
                 'identifier': en_page.data['title'],
                 'label': {},
@@ -48,7 +61,8 @@ class WikiDataLoader(BaseLoader):
             }
             self.add_label_and_description(en_page, 'en', ent_type, title)
         elif lang == 'en':
-            title = self._page.data['title']
+            title = re.sub(r"\+|-|–|\/|:|\s", '_',
+                           re.sub(r"'s?|\(|\)|,", '', self._page.data['title']))
             self._info[ent_type][title] = {
                 'identifier': self._page.data['title'],
                 'label': {},
