@@ -1,5 +1,6 @@
 from .WikiDataLoader import WikiDataLoader
 import wptools
+import re
 
 
 class WikiDataWithContextLoader(WikiDataLoader):
@@ -19,7 +20,11 @@ class WikiDataWithContextLoader(WikiDataLoader):
             rlt_ru_page = wptools.page(wikibase=rlt, lang='ru', skip=[
                                        'labels', 'imageinfo'], silent=True)
             rlt_ru_page.get_wikidata()
-            rlt_id = rlt_page.data['title']
+            if 'title' in rlt_page.data:
+                rlt_id = re.sub(
+                    r"\+|-|–|\/|:|\s", '_', re.sub(r"'s?|\(|\)|,", '', rlt_page.data['title']))
+            else:
+                continue
 
             self._info['relations'][rlt_id] = {
                 'identifier': rlt_id,
@@ -39,9 +44,10 @@ class WikiDataWithContextLoader(WikiDataLoader):
                         ent_ru_page = wptools.page(wikibase=ent, lang='ru', skip=[
                                                    'labels', 'imageinfo'], silent=True)
                         ent_ru_page.get_wikidata()
-                        try:
-                            ent_id = ent_page.data['title']
-                        except KeyError:
+                        if 'title' in ent_page.data:
+                            ent_id = re.sub(
+                                r"\+|-|–|\/|:|\s", '_', re.sub(r"'s?|\(|\)|,", '', ent_page.data['title']))
+                        else:
                             continue
 
                         self._info['entities'][ent_id] = {

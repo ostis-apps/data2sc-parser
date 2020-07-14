@@ -34,12 +34,12 @@ Example
 * Then type language of title with `--lang` attribute (by default its 'en')
 * Don't forget to choose directory for saving scs files and images. Make it with `--dir` attribute (by default its 'sc_out')
 * Select external source with attribute `--source` from 'wiki' and 'google' (by default its 'wiki')
-* If you want to get information about entity with context (relations with other entities and etc.) use `--context=yes` (by default its 'no')
-* To get an intermediate JSON file use `--debug=yes` (by default its 'no')
+* If you want to get information about entity with context (relations with other entities and etc.) use `--context` (by default its 'False')
+* To get an intermediate JSON file use `--debug` (by default its 'False')
 
 Example with attributes
 
-    python3 parse.py Минск --lang=ru --dir=output_dir --debug=yes
+    python3 parse.py Минск --lang=ru --dir=output_dir --debug
 
 For help enter
 
@@ -66,9 +66,9 @@ You can see 3 sections:
 
 In `entities` section stores info about all entities which was loaded from external sources. Each entity include `identifier`, `label` and `description`. `label` and `description` include information in different languages. If loaded entity has image in `image_url` stores URL for loading this image.
 
-For `relations` section stores info about relations. All the same as in `entities` section but relations usually don't have images.
+In `relations` section stores info about relations. All the same as in `entities` section but relations usually don't have images.
 
-In `triplets` section stores relations between entities. It is represented in form of triplets, where the first element is the entity from which a relation goes to the second entity. Second element is the relation that two entities. Third element is second entity.
+In `triplets` section stores relations between entities. It is represented in form of triplets, where the first element is the entity from which a relation goes to the second entity. Second element is the relation that connect two entities. Third element is second entity.
 
 After loading data JSON file translating by JsonToScsTranslator and all info saves to SCs files.
 

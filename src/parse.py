@@ -38,7 +38,7 @@ def parse(entities, save_dir='sc_out', lang='en', loader='wiki', with_context=Fa
 
 def args_parser_init():
     parser = argparse.ArgumentParser(
-        description='Loader from external sources')
+        description='Module for parsing external sources into SC-code')
     parser.add_argument('entities', metavar='ENT', type=str,
                         nargs='+', help="Searched entities")
     parser.add_argument(
@@ -47,18 +47,11 @@ def args_parser_init():
                         help='Enter directory to save scs files')
     parser.add_argument("--source", choices=["wiki", "google"],
                         default="wiki", type=str, help="Select external source")
-    parser.add_argument("--context", choices=["yes", "no"], default='no',
-                        type=str, help="Get entity with context (works only with Wiki)")
-    parser.add_argument(
-        "--debug", choices=['yes', 'no'], default='no', type=str, help='If True, also saves json file')
+    parser.add_argument("--context", action='store_true',
+                        help="Get entity with context (works only with Wiki)")
+    parser.add_argument("--debug", action='store_true',
+                        help='If True, also saves JSON file')
     return parser
-
-
-def word2bool(word):
-    if word == 'yes':
-        return True
-    else:
-        return False
 
 
 if __name__ == "__main__":
@@ -66,5 +59,5 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    parse(args.entities, args.dir, args.lang, args.source,
-          word2bool(args.context), word2bool(args.debug))
+    parse(args.entities, args.dir, args.lang,
+          args.source, args.context, args.debug)

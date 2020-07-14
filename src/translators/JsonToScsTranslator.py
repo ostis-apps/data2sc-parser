@@ -2,6 +2,7 @@ import json
 import requests
 import re
 import os
+from jinja2 import Environment, FileSystemLoader
 
 
 def json_to_scs(raw_info, save_dir):
@@ -10,79 +11,69 @@ def json_to_scs(raw_info, save_dir):
     except FileExistsError:
         pass
     os.chdir(save_dir)
+
+    info = json.loads(raw_info)
+    jinja_env = Environment(loader=FileSystemLoader(os.path.realpath(
+        '{}/../templates'.format(os.path.dirname(os.path.realpath(__file__))))))
+
+    try:
+        os.mkdir('entities')
+    except FileExistsError:
+        pass
+    os.chdir('entities')
     try:
         os.mkdir('images')
     except FileExistsError:
         pass
-    info = json.loads(raw_info)
-
+    template = jinja_env.get_template('entity.scs')
     for ent in info['entities'].values():
-        try:
-            translate_entity(ent)
-        except Exception:
-            continue
-
-    for rlt in info['relations'].values():
-        try:
-            translate_relation(rlt)
-        except Exception:
-            continue
-
-    for triplet in info['triplets']:
-        scs = open('triplets.scs', 'at', encoding='utf-8')
-        scs.write('{} => {}: {};;\n'.format(
-            triplet[0], triplet[1], triplet[2]))
-        scs.close()
-
-
-def translate_entity(ent):
-    scs = open('{}.scs'.format(ent['identifier']), 'wt', encoding='utf-8')
-    scs.write(ent['identifier']+'\n')
-    scs.write('=> nrel_main_idtf:\n')
-    for lang, label in ent['label'].items():
-        scs.write('\t[{}] (* <- lang_{};; *);\n'.format(label, lang))
-    scs.write(
-        '<- rrel_key_sc_element: ...\n(*\n\t<- sc_definition;;\n\t<= nrel_sc_text_translation:')
-    for lang, description in ent['description'].items():
-        scs.write(
-            '\n\t\t... (* -> rrel_example: [{}] (* <-lang_{};; *);; *);'.format(description, lang))
-    scs.write(';\n*);\n')
+        translate_entity(ent, template)
+    os.chdir('..')
 
     try:
-        image_url = ent['image_url']
-        image_format = re.findall(r'\.\w*$', image_url)[0]
-        image_format = image_format[1:]
+        os.mkdir('relations')
+    except FileExistsError:
+        pass
+    os.chdir('relations')
+    template = jinja_env.get_template('relation.scs')
+    for rlt in info['relations'].values():
+        translate_relation(rlt, template)
+    os.chdir('..')
+
+    template = jinja_env.get_template('triplets.scs')
+    if len(info['triplets']) != 0:
+        scs = open('triplets.scs', 'at', encoding='utf-8')
+        scs.write(template.render(triplets=info['triplets']))
+        scs.close()
+    os.chdir('..')
+
+
+def translate_entity(entity, template):
+    if 'image_url' in entity:
+        image_url = entity['image_url']
+        image_format = re.findall(r'\.\w*$', image_url)[0][1:]
+        image_name = '{}_image.{}'.format(entity['identifier'], image_format)
         image = requests.get(image_url)
         os.chdir('images')
         image_file = open('{}_image.{}'.format(
-            ent['identifier'], image_format), 'wb')
+            entity['identifier'], image_format), 'wb')
         image_file.write(image.content)
         image_file.close()
         os.chdir('..')
-        scs.write(
-            '<- rrel_key_sc_element: ...\n(*\n\t<-sc_illustration;;\n\t<=nrel_sc_text_translation: ...\n')
-        scs.write('\t(*\n\t\t-> rrel_example: "file://images/{}_image.{}"'.format(
-            ent['identifier'], image_format))
-        scs.write(
-            ' (* => nrel_format: format_{};; *);;\n\t*);;\n*);\n'.format(image_format))
-    except KeyError:
-        pass
 
-    scs.write('<-sc_node_not_relation;;')
+        rendered_tmpl = template.render(identifier=entity['identifier'], labels=entity['label'].items(
+        ), descriptions=entity['description'].items(), img_name=image_name, img_format=image_format)
+    else:
+        rendered_tmpl = template.render(identifier=entity['identifier'], labels=entity['label'].items(
+        ), descriptions=entity['description'].items())
+
+    scs = open('{}.scs'.format(entity['identifier']), 'wt', encoding='utf-8')
+    scs.write(rendered_tmpl)
     scs.close()
 
 
-def translate_relation(rlt):
-    scs = open('{}.scs'.format(rlt['identifier']), 'wt', encoding='utf-8')
-    scs.write(rlt['identifier']+'\n')
-    scs.write('=> nrel_main_idtf:\n')
-    for lang, label in rlt['label'].items():
-        scs.write('\t[{}] (* <- lang_{};; *);\n'.format(label, lang))
-    scs.write(
-        '<- rrel_key_sc_element: ...\n(*\n\t<- sc_definition;;\n\t<= nrel_sc_text_translation:')
-    for lang, description in rlt['description'].items():
-        scs.write(
-            '\n\t\t... (* -> rrel_example: [{}] (* <-lang_{};; *);; *);'.format(description, lang))
-    scs.write(';\n*);\n')
-    scs.write('<-sc_node_norole_relation;;')
+def translate_relation(relation, template):
+    scs = open('{}.scs'.format(relation['identifier']), 'wt', encoding='utf-8')
+    scs.write(template.render(identifier=relation['identifier'], labels=relation['label'].items(
+    ), descriptions=relation['description'].items()))
     scs.close()
