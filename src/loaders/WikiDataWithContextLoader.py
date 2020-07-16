@@ -9,6 +9,7 @@ class WikiDataWithContextLoader(WikiDataLoader):
     def __init__(self):
         super().__init__()
         self._lock = threading.Lock()
+        self._THREADS_NUM = 16
 
     def load_object(self, obj, obj_type):
         page = wptools.page(wikibase=obj, skip=['labels'], silent=True)
@@ -67,7 +68,7 @@ class WikiDataWithContextLoader(WikiDataLoader):
                             re.sub(r"'s?|\(|\)|,", '', self._page.data['title']))
         loading_queue = Queue()
 
-        for _ in range(16):
+        for _ in range(self._THREADS_NUM):
             threading.Thread(target=self.thread_fun, args=[
                              loading_queue, ], daemon=True).start()
 
