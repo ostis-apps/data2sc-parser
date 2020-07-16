@@ -3,7 +3,9 @@
 	[{{label}}] (* <- lang_{{lang}};; *);{% endfor %}
 <- rrel_key_sc_element: ...
     (*
-	    <- sc_definition;;
+		<- sc_definition;;
+		=> nrel_main_idtf:{% for lang, label in labels %}
+			{% if lang == 'ru' %}[Опр.({{label}})]{% else %}[Def.({{label}})]{% endif %} (* <-lang_{{lang}};; *);{% endfor %};
 	    <= nrel_sc_text_translation:{% for lang, description in descriptions %}
 		    ... (* -> rrel_example: [{{description}}] (* <-lang_{{lang}};; *);; *);{% endfor %};
     *);	
