@@ -21,14 +21,27 @@ Requirements
 
 For requirements installation use
 
-    pip install -r requirements.txt
+    pip3 install -r requirements.txt
+
+---
+**NOTE**
+
+Install `pip3` and `libssl-dev` before. For this use:
+
+    sudo apt install python3-pip
+
+and
+
+    sudo apt install libssl-dev
+
+---
 
 Usage
 ------------
 
 Example
 
-    python3 parse.py Minsk Belarus "Belarusian State University of Informatics and Radioelectronics"
+    python3 src/parse.py Minsk Belarus "Belarusian State University of Informatics and Radioelectronics"
 
 * Input all entities titles with a space
 * Then type language of title with `--lang` attribute (by default its 'en')
@@ -39,11 +52,11 @@ Example
 
 Example with attributes
 
-    python3 parse.py Минск --lang=ru --dir=output_dir --debug
+    python3 src/parse.py Минск --lang=ru --dir=output_dir --debug
 
 For help enter
 
-    python3 parse.py --help
+    python3 src/parse.py --help
 
 Architecture
 ------------
