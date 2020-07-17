@@ -39,11 +39,8 @@ class WikiDataLoader(BaseLoader):
                 try:
                     self._page.get_wikidata()
                 except LookupError:
-                    words = entity.split()
-                    for index, word in enumerate(words):
-                        words[index] = word.capitalize()
-                    self._page = wptools.page(' '.join(words), skip=[
-                        'labels'], lang=lang, silent=True)
+                    self._page = wptools.page(entity.title(), skip=[
+                                              'labels'], lang=lang, silent=True)
                     self._page.get_wikidata()
             ent_type = 'entities' if self._page.data['wikibase'].startswith(
                 'Q') else 'relations'
