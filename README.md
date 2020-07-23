@@ -32,7 +32,7 @@ Install `pip3` and `libssl-dev` before. For this use:
 
 and
 
-    sudo apt install libssl-dev
+    sudo apt install libcurl4-openssl-dev libssl-dev
 
 ---
 
