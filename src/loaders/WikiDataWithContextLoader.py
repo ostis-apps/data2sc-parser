@@ -45,8 +45,10 @@ class WikiDataWithContextLoader(WikiDataLoader):
     def resolve_ids(self):
         for triplet in self._info['triplets']:
             _, rlt, ent = triplet
-            triplet[1] = self._info['relations'][rlt]['identifier']
-            triplet[2] = self._info['entities'][ent]['identifier']
+            if rlt.startswith('P'):
+                triplet[1] = self._info['relations'][rlt]['identifier']
+            if ent.startswith('Q'):
+                triplet[2] = self._info['entities'][ent]['identifier']
 
         temp_ent = self._info['entities']
         self._info['entities'] = {}
@@ -80,6 +82,11 @@ class WikiDataWithContextLoader(WikiDataLoader):
                     if ent.startswith('Q'):
                         loading_queue.put([ent, 'entities'])
                         self._info['triplets'].append([page_title, rlt, ent])
+                    else:
+                        if set(re.findall(r'\.\w*$', ent)) & set(['.jpg', '.svg', '.png', '.map']):
+                            continue
+                        self._info['triplets'].append(
+                            [page_title, rlt, '[%s]' % ent])
 
         loading_queue.join()
         self.resolve_ids()

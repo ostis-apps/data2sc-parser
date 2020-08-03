@@ -32,7 +32,18 @@ Install `pip3` and `libssl-dev` before. For this use:
 
 and
 
-    sudo apt install libssl-dev
+    sudo apt install libcurl4-openssl-dev libssl-dev
+
+
+**About Wikipedia Tools**
+
+Recommend to use [this](https://github.com/Flombik/wptools) version of Wikipedia tools.
+
+To install use:
+
+    git clone https://github.com/Flombik/wptools.git
+    cd wptools
+    pip3 install -U .
 
 ---
 
