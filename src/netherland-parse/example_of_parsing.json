@@ -1,0 +1,57 @@
+[
+    {
+        "Название препарата (национальный язык)": "desferal",
+        "Название препарата (английский)": "Lateral",
+        "ATC-код": "V03AC01",
+        "Дозировка": "nan",
+        "Действующие вещества": [
+            "deferoxaminemesilaat_500_mg_flacon_samenstelling_overeenkomend_met",
+            "deferoxamine_426_8_mg_flacon"
+        ],
+        "Варианты альтернативного названия препарата": "deferoxamine",
+        "Производитель/держатель лицензии": "Medcor Pharmaceuticals B.V.Artemisweg 2328239 DE LELYSTAD",
+        "Состав": [
+            "geen_hulpstoffen"
+        ],
+        "Фармацевтическая форма": "powder_for_solution_for_injection_or_infusion",
+        "Способы применения": "parenteral"
+    },
+    {
+        "Название препарата (национальный язык)": "zoladex_10",
+        "Название препарата (английский)": "zoladex_10",
+        "ATC-код": "L02AE03",
+        "Дозировка": "nan",
+        "Действующие вещества": [
+            "goserelineacetaat_samenstelling_overeenkomend_met",
+            "",
+            "gosereline_10_8_mg_stuk"
+        ],
+        "Варианты альтернативного названия препарата": "goserelin",
+        "Производитель/держатель лицензии": "Medcor Pharmaceuticals B.V.Artemisweg 2328239 DE LELYSTAD",
+        "Состав": [
+            "melkzuur(d_l)_glycolzuur_copolymeer"
+        ],
+        "Фармацевтическая форма": "implantatietablet",
+        "Способы применения": "parenteral"
+    },
+    {
+        "Название препарата (национальный язык)": "alutard_sq_2_huisstofmijten_100",
+        "Название препарата (английский)": "Alutard_sq_2_huisstofmites_100",
+        "ATC-код": "V01AA03",
+        "Дозировка": "nan",
+        "Действующие вещества": [
+            "waterig_extract_van_een_mengsel_van_dermatophagoides_pteronyssinus_en_dermatophagoides_farinae_100000_sq_e_ml"
+        ],
+        "Варианты альтернативного названия препарата": "house_dust_mites",
+        "Производитель/держатель лицензии": "Medcor Pharmaceuticals B.V.Artemisweg 2328239 DE LELYSTAD",
+        "Состав": [
+            "aluminiumhydroxide_0_water",
+            "fenol",
+            "natriumchloride",
+            "natriumwaterstofcarbonaat_(e_500_(ii))",
+            "water_voor_injectie"
+        ],
+        "Фармацевтическая форма": "suspension_for_injection",
+        "Способы применения": "subcutane"
+    }
+]
