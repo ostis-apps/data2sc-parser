@@ -1,0 +1,19 @@
+{{identifier}}
+=> nrel_main_idtf:{% for lang, label in labels %}
+    [{{label}}] (* <-lang_{{lang}};; *);{% endfor %}
+
+<- rrel_key_sc_element: ...
+    (*
+		<- sc_definition;;
+		=> nrel_main_idtf:{% for lang, label in labels %}
+		    [Def.({{label}})] (* <-lang_{{lang}};; *);{% endfor %};
+    *);
+	
+=> nrel_atc_code: {{code}};
+{% if manufacturer %}=> nrel_company: {{manufacturer}};{% endif %}
+{% if active_substance %}{% for substance in active_substance %}=> nrel_active_substances: {{substance}};
+{% endfor %}{% endif %}
+{% if form %}{% for f in form %}=> nrel_dosage_form: {{f}};
+{% endfor %}{% endif %}
+
+<-sc_node_not_relation;;
