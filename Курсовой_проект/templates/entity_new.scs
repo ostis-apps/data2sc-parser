@@ -1,0 +1,8 @@
+{{identifier}}
+<-sc_node_not_relation;
+=> nrel_main_idtf:{% for lang, label in labels %}
+	[{{label}}] (* <- lang_{{lang}};; *);{% endfor %}
+{% for nmen, dsk in dsks %}
+=>	nrel_{{nmen}}:[{{dsk}}];{% endfor %}
+{% for nmen,  den in dens %}
+=>	nrel_{{nmen}}:[{{den}}];{% endfor %}
